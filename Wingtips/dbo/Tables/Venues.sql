@@ -1,4 +1,4 @@
-CREATE TABLE [dbo].[Venues] (
+CREATE TABLE [dbo].[Venues] ( 
     [VenueId]       INT            NOT NULL,
     [VenueName]     NVARCHAR (50)  NOT NULL,
     [VenueType]     NVARCHAR (30)  NOT NULL,
