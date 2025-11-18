@@ -31,9 +31,9 @@
           with:
             dotnet-version: 8.0.x
         - name: Restore dependencies
-          run: dotnet restore Wingtips/Wingtips.sqlproj
+          run: dotnet restore wingtips/wingtips.sqlproj
         - name: Build
-          run: dotnet build Wingtips/Wingtips.sqlproj --no-restore
+          run: dotnet build wingtips/wingtips.sqlproj --no-restore
         - name: 'wait for sql container to be ready'
           run: |
             set +o pipefail +e
@@ -50,6 +50,11 @@
                 fi
             done
             set -o pipefail -e
+
+        - name: Enable contained database authentication
+          run: |
+            sqlcmd -S localhost -U sa -P ${{ secrets.CONTAINER_SQL_PASSWORD }} -d master -Q "EXEC sp_configure 'show advanced options', 1; RECONFIGURE;"
+            sqlcmd -S localhost -U sa -P ${{ secrets.CONTAINER_SQL_PASSWORD }} -d master -Q "EXEC sp_configure 'contained database authentication', 1; RECONFIGURE;"
 
         - name: Publish SQL project
           run: |
